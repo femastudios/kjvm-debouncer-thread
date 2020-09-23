@@ -147,6 +147,9 @@ class DebouncerThread<T>(
     }
 }
 
+/**
+ * Creates a new [DebouncerThread] with no parameters.
+ */
 fun DebouncerThread(
     waitTime: Long,
     maxWaitTime: Long? = null,
