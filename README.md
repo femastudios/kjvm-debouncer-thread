@@ -23,6 +23,8 @@ debounce()
 ```
 
 ## Getting started
+This library is published in [maven central](https://search.maven.org/artifact/com.femastudios/debouncer-thread). Add the `com.femastudios:debouncer-thread:1.0.0` dependency to include it in your project.
+
 The most basic usage is the following:
 ```kotlin
 val dt = DebouncerThread(waitTime=250, maxWaitTime=1500) {
@@ -36,7 +38,7 @@ dt.debounce() // Requests operation execution
 // ..or to trigger immediately
 dt.debounceNow()
 ```
-The `maxWaitTime` parameter can be ombitted and will be null by default.
+The `maxWaitTime` parameter can be ombitted and will be `null` by default.
 
 ## Parameterized example
 A more complex usage is using parameters:
