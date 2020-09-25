@@ -11,21 +11,26 @@ import kotlin.concurrent.withLock
  * Thread that "debounces" an operation.
  *
  * Every time the [debounce] method is called, the thread waits for [waitTime] milliseconds before calling
- * [executeOperation]. If another [debounce] is called in the mean time, the timer is reset and another full [waitTime]
+ * [operation]. If another [debounce] is called in the mean time, the timer is reset and another full [waitTime]
  * milliseconds will be waited. All parameters of type [T] passed to the [debounce] method are kept in a [List] that is
- * passed to [executeOperation].
+ * passed to [operation].
  *
  * When [maxWaitTime] is specified, it is guaranteed that no more than [maxWaitTime] milliseconds will pass between each
- * [executeOperation] call. Not specifying this value means that a continuous stream of close [debounce] calls (less
- * than [waitTime] between each call) will result in never calling [executeOperation] and a forever growing list of
+ * [operation] call. Not specifying this value means that a continuous stream of close [debounce] calls (less
+ * than [waitTime] between each call) will result in never calling [operation] and a forever growing list of
  * parameters.
+ *
+ * @param waitTime the time (in ms) that should pass between a [debounce] and the execution of the [operation]
+ * @param maxWaitTime the maximum amount of time (in ms) that should pass between any [debounce] call and the execution
+ * of the [operation]
+ * @param operation the operation to execute on [debounce]
  */
 class DebouncerThread<T>(
     val waitTime: Long,
     val maxWaitTime: Long? = null,
     name: String = nextName(),
     start: Boolean = true,
-    val executeOperation: (List<T>) -> Unit,
+    val operation: (List<T>) -> Unit,
 ) : Thread(name) {
 
     private val lock = ReentrantLock()
@@ -134,7 +139,7 @@ class DebouncerThread<T>(
                 }
             }
             paramsCopy?.let {
-                executeOperation(it)
+                operation(it)
             }
         }
     }
